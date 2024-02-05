@@ -1,0 +1,80 @@
+{% extends "xbase.njk" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: url('your-image-url.jpg') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #fff;
+    }
+
+    form {
+        background-color: #283238;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+        width: 400px;
+        text-align: center;
+    }
+
+    h1 {
+        color: #2196F3;
+        font-size: 36px;
+        margin-bottom: 30px;
+    }
+
+    label {
+        display: block;
+        margin: 20px 0 12px;
+        color: #fff;
+        font-size: 20px;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 25px;
+        border: 1px solid #546e7a;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background-color: #37474f;
+        color: #fff;
+        font-size: 18px;
+    }
+
+    button {
+        width: 100%;
+        padding: 16px;
+        background-color: #2196F3;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #1565c0;
+    }
+</style>
+
+<form method="POST">  
+    <h1>Sağlık Sistemi Giriş</h1>
+
+    <label for="username">Kullanıcı Adı:</label>   
+    <input type="text" id="username" name="username" required>  
+    
+    <label for="password">Şifre:</label>   
+    <input type="password" id="password" name="password" required>  
+    
+    <button type="submit">Giriş Yap</button>      
+</form>
+{% endblock %}

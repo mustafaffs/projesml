@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sağlık Takip</title>
+    <style>
+
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #ecf0f1;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #ecf0f1;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #95a5a6;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #95a5a6;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        button {
+            padding: 8px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 2px solid #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sağlık Takip</h1>
+        <button onclick="logout()">Çıkış Yap</button>
+    </header>
+
+    <main>
+        <form action="." method="POST" onsubmit="return validateForm()">
+            <label for="seker">Şeker:</label>
+            <input type="number" id="seker" name="seker" step="0.01" required>
+
+           <label for="tansiyon">Tansiyon:</label>
+<input type="text" id="tansiyon" name="tansiyon" step="0.01" min="-999" required>
+
+            <label for="kolestrol">Kolestrol:</label>
+            <input type="number" id="kolestrol" name="kolestrol" step="0.01" required>
+
+            <input type="submit" value="Kaydet">
+        </form>
+
+        <hr>
+
+        <table>
+            <tr>
+                <th>Tarih</th>
+                <th>Şeker</th>
+                <th>Kolestrol</th>
+                <th>Tansiyon</th>
+                <th>İşlemler</th>
+            </tr>
+
+            {% for item in data %}
+            <tr>
+                <td>{{ item.date | date }}</td>
+                <td>{{ item.seker }}</td>
+                <td>{{ item.kolestrol }}</td>
+                <td>{{ item.tansiyon }}</td>
+                <td><button onclick="askDelete({{ item.id }})">Sil</button></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">Kayıt Yok</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <script>
+            async function askDelete(id) {
+                if (confirm('Kayıt silinecek, emin misiniz?')) {
+                    const response = await fetch("/delete/" + id);
+                    window.location.href = '/';
+                }
+            }
+
+            function validateForm() {
+    
+   
+var seker = document.getElementById('seker').value;
+    
+   
+var tansiyon = document.getElementById('tansiyon').value;
+    var kolestrol = document.getElementById('kolestrol').value;
+
+    
+
+   
+
+    
+   
+if (seker === '' || tansiyon === '' || kolestrol === '') {
+        alert('Lütfen tüm alanları doldurun.');
+        
+       
+return false;
+    }
+
+    
+   
+    
+   
+if (tansiyon.includes(' ') && tansiyon.includes('/')) {
+        
+       
+alert('Tansiyon alanında boşluk bırakıldığında / işareti kullanılamaz.');
+        
+       
+return false;
+    }
+
+    
+   
+return true;
+}
+        </script>
+
+        <script>
+            function validateForm() {
+                var seker = document.getElementById('seker').value;
+                var tansiyon = document.getElementById('tansiyon').value;
+                var kolestrol = document.getElementById('kolestrol').value;
+
+                if (seker === '' || tansiyon === '' || kolestrol === '') {
+                    alert('Lütfen tüm alanları doldurun.');
+                    return false;
+                }
+
+                return true;
+            }
+
+            async function askDelete(id) {
+                if (confirm('Kayıt silinecek, emin misiniz?')) {
+                    const response = await fetch("/delete/" + id);
+                    window.location.href = '/';
+                }
+            }
+
+            function logout() {
+                sessionStorage.clear();
+                window.location.href = '/logout';
+            }
+        </script>
+        <script>
+    async function askDelete(id) {
+        // Show the modal
+        document.getElementById('confirmationModal').style.display = 'block';
+
+        // Handle deletion when the user confirms
+        document.getElementById('confirmDeleteButton').onclick = async function () {
+            const response = await fetch("/delete/" + id);
+            window.location.href = '/';
+        };
+
+        // Close the modal when the user cancels
+        document.getElementById('cancelDeleteButton').onclick = function () {
+            document.getElementById('confirmationModal').style.display = 'none';
+        };
+    }
+
+    function validateForm() {
+        var seker = document.getElementById('seker').value;
+        var tansiyon = document.getElementById('tansiyon').value;
+        var kolestrol = document.getElementById('kolestrol').value;
+
+        if (seker === '' || tansiyon === '' || kolestrol === '') {
+            alert('Lütfen tüm alanları doldurun.');
+            return false;
+        }
+
+        if (tansiyon.includes(' ') && tansiyon.includes('/')) {
+            alert('Tansiyon alanında boşluk bırakıldığında / işareti kullanılamaz.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Darker background */
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #333; /* Darker modal background */
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        color: #fff; /* Text color */
+    }
+
+    .modal-buttons {
+        margin-top: 15px;
+    }
+
+    .modal-buttons button {
+        margin: 0 5px;
+        padding: 8px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #fff; /* Button text color */
+    }
+
+    #confirmDeleteButton {
+        background-color: #c0392b; /* Darker red */
+    }
+
+    #cancelDeleteButton {
+        background-color: #2980b9; /* Darker blue */
+    }
+</style>
+
+<!-- Delete Confirmation Modal HTML -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <p>Kayıt silinecek, emin misiniz?</p>
+        <div class="modal-buttons">
+            <button id="confirmDeleteButton">Evet</button>
+            <button id="cancelDeleteButton">Hayır</button>
+        </div>
+    </div>
+</div>
+
+    </main>
+</body>
+</html>
